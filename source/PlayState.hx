@@ -13,6 +13,8 @@ class PlayState extends FlxState
 		super.create();
 
 		player = new Player(20, 20);
+		player.setTargetVelocity(500);
+
 		add(player);
 
 		#if debug
@@ -30,7 +32,7 @@ class PlayState extends FlxState
 	{
 		if (FlxG.mouse.justPressed)
 		{
-			player.moveToMouse(200);
+			player.addTarget(FlxG.mouse.getPosition());
 		}
 
 		if (FlxG.keys.justPressed.BACKSLASH)

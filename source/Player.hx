@@ -13,7 +13,11 @@ class Player extends FlxSprite
 {
 	private var startPoint:Null<FlxPoint>;
 	private var moveDistance:Null<Float>;
+
 	private var target:Null<FlxPoint>;
+	private var targets:Null<Array<FlxPoint>>;
+
+	private var targetVelocity:Float = 50;
 
 	public function new(x:Float, y:Float)
 	{
@@ -37,20 +41,24 @@ class Player extends FlxSprite
 			this.moveDistance = 0;
 			this.startPoint = null;
 			this.target = null;
+			this.targets.shift();
+
+			if (this.targets != null)
+			{
+				if (this.targets.length > 0)
+				{
+					this.moveToPoint(targets[0], this.targetVelocity, false);
+				}
+			}
 		}
 	}
 
-	public function stopMoving()
-	{
-		this.velocity = new FlxPoint(0, 0);
-	}
-
-	public function moveToMouse(velocity:Float)
+	public function moveToMouse(velocity:Float):Void
 	{
 		this.moveToPoint(FlxG.mouse.getPosition(), velocity, false);
 	}
 
-	public function moveToPoint(target:FlxPoint, velocity:Float, shouldStop:Bool = true)
+	public function moveToPoint(target:FlxPoint, velocity:Float, shouldStop:Bool = true):Void
 	{
 		// Store the target position.
 		this.target = target;
@@ -63,6 +71,31 @@ class Player extends FlxSprite
 
 		this.velocity.rotate(FlxPoint.weak(0, 0), MathP.degreesBetweenPoint(this.getMidpoint(), target));
 		FlxVelocity.moveTowardsPoint(this, target, velocity);
+	}
+
+	public function setTargetVelocity(target:Float):Void
+	{
+		this.targetVelocity = target;
+	}
+
+	public function getTargetVelocity():Float
+	{
+		return this.targetVelocity;
+	}
+
+	public function addTarget(target:FlxPoint)
+	{
+		if (this.targets == null)
+		{
+			this.targets = new Array<FlxPoint>();
+		}
+
+		if (this.target == null)
+		{
+			this.moveToPoint(this.getPosition(), 1, false);
+		}
+
+		this.targets.push(target);
 	}
 
 	private function shouldStopMoving():Bool
