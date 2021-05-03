@@ -2,20 +2,24 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
+import flixel.util.FlxPath;
 
 class PlayState extends FlxState
 {
 	// var playerSprite:FlxSprite = new FlxSprite();
 	var player:Player;
+	var line:Line;
 
 	override public function create()
 	{
 		super.create();
 
 		player = new Player(20, 20);
-		player.setTargetVelocity(500);
 
 		add(player);
+		add(player.line);
 
 		#if debug
 		debug();
@@ -30,9 +34,14 @@ class PlayState extends FlxState
 
 	function handleInput()
 	{
-		if (FlxG.mouse.justPressed)
+		if (FlxG.mouse.pressed)
 		{
-			player.addTarget(FlxG.mouse.getPosition());
+			this.player.line.points.push(FlxG.mouse.getPosition());
+		}
+
+		if (FlxG.mouse.justPressedRight)
+		{
+			this.player.moveAlongLine();
 		}
 
 		if (FlxG.keys.justPressed.BACKSLASH)

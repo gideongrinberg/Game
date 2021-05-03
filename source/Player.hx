@@ -1,110 +1,33 @@
 package;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
-import flixel.math.FlxVelocity;
 import flixel.util.FlxColor;
-import flixel.util.FlxSpriteUtil;
-import haxe.Timer;
-import utils.Math.MathP;
+import flixel.util.FlxPath;
+import haxe.io.Path;
 
 class Player extends FlxSprite
 {
-	private var startPoint:Null<FlxPoint>;
-	private var moveDistance:Null<Float>;
-
-	private var target:Null<FlxPoint>;
-	private var targets:Null<Array<FlxPoint>>;
-
-	private var targetVelocity:Float = 50;
+	public var line:Line;
 
 	public function new(x:Float, y:Float)
 	{
 		super(x, y);
+
+		this.path = new FlxPath();
+		this.line = new Line();
+
 		makeGraphic(16, 16, FlxColor.BLUE);
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
-		if (shouldStopMoving())
-		{
-			// Clear the velocity.
-			this.velocity = new FlxPoint(0);
-
-			// Make sure the sprite ends up exactly on target.
-			this.setPosition(this.target.x, this.target.y);
-
-			// Clear the move state.
-			this.moveDistance = 0;
-			this.startPoint = null;
-			this.target = null;
-			this.targets.shift();
-
-			if (this.targets != null)
-			{
-				if (this.targets.length > 0)
-				{
-					this.moveToPoint(targets[0], this.targetVelocity, false);
-				}
-			}
-		}
+		line.update(elapsed);
 	}
 
-	public function moveToMouse(velocity:Float):Void
+	public function moveAlongLine()
 	{
-		this.moveToPoint(FlxG.mouse.getPosition(), velocity, false);
-	}
-
-	public function moveToPoint(target:FlxPoint, velocity:Float, shouldStop:Bool = true):Void
-	{
-		// Store the target position.
-		this.target = target;
-
-		// Store initial position.
-		this.startPoint = this.getMidpoint();
-
-		// Calculate the distance.
-		this.moveDistance = this.startPoint.distanceTo(this.target);
-
-		this.velocity.rotate(FlxPoint.weak(0, 0), MathP.degreesBetweenPoint(this.getMidpoint(), target));
-		FlxVelocity.moveTowardsPoint(this, target, velocity);
-	}
-
-	public function setTargetVelocity(target:Float):Void
-	{
-		this.targetVelocity = target;
-	}
-
-	public function getTargetVelocity():Float
-	{
-		return this.targetVelocity;
-	}
-
-	public function addTarget(target:FlxPoint)
-	{
-		if (this.targets == null)
-		{
-			this.targets = new Array<FlxPoint>();
-		}
-
-		if (this.target == null)
-		{
-			this.moveToPoint(this.getPosition(), 1, false);
-		}
-
-		this.targets.push(target);
-	}
-
-	private function shouldStopMoving():Bool
-	{
-		if (this.startPoint == null || this.moveDistance == null)
-		{
-			return false;
-		}
-
-		return this.startPoint.distanceTo(this.getMidpoint()) >= moveDistance;
+		this.path = new FlxPath().start(line.points);
 	}
 }
