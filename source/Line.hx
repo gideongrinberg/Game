@@ -4,8 +4,6 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
-import haxe.Exception;
-import openfl.display.LineScaleMode;
 
 using flixel.util.FlxSpriteUtil;
 

@@ -12,13 +12,13 @@ class PlayState extends FlxState
 	override public function create()
 	{
 		super.create();
-
 		player = new Player(20, 20);
 
 		add(player);
 		add(player.line);
 
 		#if debug
+		player.path.drawDebug();
 		debug();
 		#end
 	}
