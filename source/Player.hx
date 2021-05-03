@@ -28,6 +28,6 @@ class Player extends FlxSprite
 
 	public function moveAlongLine()
 	{
-		this.path = new FlxPath().start(line.points);
+		this.path = new FlxPath().start(line.points, 100, FlxPath.FORWARD, true);
 	}
 }

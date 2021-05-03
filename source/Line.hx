@@ -37,6 +37,7 @@ class Line extends FlxSprite
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
 		for (i in 0...this.points.length)
 		{
 			if (this.points[i + 1] != null)

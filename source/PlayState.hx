@@ -2,9 +2,6 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxState;
-import flixel.math.FlxPoint;
-import flixel.util.FlxColor;
-import flixel.util.FlxPath;
 
 class PlayState extends FlxState
 {
